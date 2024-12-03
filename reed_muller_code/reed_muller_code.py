@@ -64,15 +64,17 @@ class ReedMuller:
         return generate_apply_bin_noise(codeword, self.t)
 
     def decode(self, received):
+        r = self.r
         curr_mess = [0] * self.k
-        for i in range(self.r, -1, -1):
-            self.curr_mess = decoder_step_for_fixed_curr_r(
+        for i in range(r, -1, -1):
+            curr_mess = decoder_step_for_fixed_curr_r(
                 self.k,
                 received,
                 curr_mess,
-                self.r,
+                i,
                 self.m
             )
+            print(curr_mess, i, received)
         return curr_mess
 
 
@@ -143,11 +145,10 @@ def decoder_step_for_fixed_curr_r(
 
 
 rm = ReedMuller(2, 4)
-
-print(ReedMuller.decode(rm, rm.encode([1,1,1,0,1,1,0,1,1,0,1])))
-
-# print(code_word, 'codeword')
-#
-# print(code_word, 'noise added')
-# print(decoder_step_for_fixed_curr_r(11, code_word,
-#                                     [0]*11, 2,  4))
+mes = rm.encode([1,1,1,0,1,1,0,1,1,0,1])
+print(ReedMuller.decode(rm, mes))
+code_word = rm.encode([1,1,1,0,1,1,0,1,1,0,1])
+print(code_word, 'codeword')
+# не корректно работает для малых r
+print(decoder_step_for_fixed_curr_r(11, code_word,
+                                    [0]*11, 2,  4))
