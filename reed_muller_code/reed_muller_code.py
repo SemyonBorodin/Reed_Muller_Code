@@ -64,17 +64,18 @@ class ReedMuller:
         return generate_apply_bin_noise(codeword, self.t)
 
     def decode(self, received):
-        r = self.r
+        actual_r = self.r
         curr_mess = [0] * self.k
-        for i in range(r, -1, -1):
+        for i in range(actual_r, -1, -1):
             curr_mess = decoder_step_for_fixed_curr_r(
                 self.k,
                 received,
                 curr_mess,
                 i,
+                actual_r,
                 self.m
             )
-            print(curr_mess, i, received)
+            # print(curr_mess, i, received)
         return curr_mess
 
 
@@ -88,15 +89,6 @@ def generate_apply_bin_noise(codeword, correction_capability):
     return codeword
 
 
-# rm_code = ReedMuller(2, 4)
-# message = [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1]
-# encoded_message = rm_code.encode(message)
-# noisy_codeword = rm_code.add_noise(encoded_message)
-# print(encoded_message, 'encoded_message a.k.a codeword')
-# print(noisy_codeword, 'noisy_codeword')
-# print(rm_code.t, 'correction capability of the RM(2,4)')
-
-
 def sum_of_powers_of_two(nums, n):
     if not nums:
         return 0
@@ -108,20 +100,23 @@ def sum_of_powers_of_two(nums, n):
 
 def decoder_step_for_fixed_curr_r(
         message_len, word,
-        curr_mess, r, m):
-
-    num_of_conjunctions = int(binom(m, r))
+        curr_mess, r,
+        actual_r, m):
+    num_of_conjunctions = int(sum([int(binom(m, k)) for k in range(r, actual_r + 1, 1)]))
     total_sum_for_seq_sums = 0
     len_check_sum = 2 ** (m - r)
     num_check_sums = 2 ** r
-    decision_sum = 0
     one_sum = 0
     var_indexes = tuple(range(0, m))
     j, k = 0, 0
     for conjunction in combinations(range(m), r):
         orthogonal_subspace_positions = tuple(x for x in var_indexes if x not in conjunction)
+        # print(f"orthogonal_subspace_positions={orthogonal_subspace_positions}, r={r}")
         k += 1
         decision_sum = 0
+        shift = num_of_conjunctions
+        conj_number = int(message_len - shift + k - 1)
+        print(conj_number, 'conj num', num_of_conjunctions, shift)
         for gamma_size in range(len(orthogonal_subspace_positions) + 1):
             for curr_orthogonal_subspace in combinations(orthogonal_subspace_positions, gamma_size):
                 for t in range(len(conjunction) + 1):
@@ -129,26 +124,33 @@ def decoder_step_for_fixed_curr_r(
                         j += 1
                         check_sum = (sum_of_powers_of_two(sub_comb, m) +
                                      sum_of_powers_of_two(curr_orthogonal_subspace, m))
-                        one_sum ^= word[check_sum]
-                        if (j != 0) and (j % len_check_sum == 0):
-                            total_sum_for_seq_sums += one_sum
+                        one_sum += word[check_sum]
+                        # print(len_check_sum, num_check_sums, curr_orthogonal_subspace, sub_comb, sum_of_powers_of_two(sub_comb, m), 'mda')
+                        if j % num_check_sums == 0:
+                            total_sum_for_seq_sums += (one_sum % 2)
                             one_sum = 0
-                        if (j != 0) and (j % (2 ** m)) == 0:
                             decision_sum += total_sum_for_seq_sums
-                            total_sum_for_seq_sums = 0
-        conj_number = int(message_len - num_of_conjunctions + k - 1)
-        if decision_sum * 2 > num_check_sums:
-            curr_mess[conj_number] ^= 1
-        else:
-            curr_mess[conj_number] ^= 0
+                            # print(decision_sum, 'decision_sum')
+                        if j % (2 ** m) == 0:
+                            # print(decision_sum, 'decision_sum', j, 'j')
+                            # print(decision_sum, 'decision_sum', 2 ** (m - r - 1), 'stepen 2',j, len_check_sum)
+                            if int(decision_sum * 2) > len_check_sum:
+                                # print(decision_sum, 'decision_sum', 2 ** (m - r - 1), 'stepen 2',j)
+                                curr_mess[conj_number] = 1
+                                total_sum_for_seq_sums = 0
+                                decision_sum = 0
+                            else:
+                                curr_mess[conj_number] = 0
+                                total_sum_for_seq_sums = 0
+                                decision_sum = 0
     return curr_mess
 
 
 rm = ReedMuller(2, 4)
-mes = rm.encode([1,1,1,0,1,1,0,1,1,0,1])
-print(ReedMuller.decode(rm, mes))
-code_word = rm.encode([1,1,1,0,1,1,0,1,1,0,1])
-print(code_word, 'codeword')
 # не корректно работает для малых r
-print(decoder_step_for_fixed_curr_r(11, code_word,
-                                    [0]*11, 2,  4))
+print(rm.encode([1,0,0,1,1,1,0,1,1,1,1]))
+print(decoder_step_for_fixed_curr_r(11, rm.encode([1,0,1,0,0,1,0,1,1,0,1]),
+                                     [0]*11, 2,  2, 4))
+code_word = rm.encode([1,0,1,0,1,0,0,1,0,1,1])
+
+print(rm.decode(code_word))
