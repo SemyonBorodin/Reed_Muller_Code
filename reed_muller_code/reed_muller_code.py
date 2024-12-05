@@ -87,7 +87,8 @@ class ReedMuller:
                                    num_check_sums + d*num_check_sums + t * int(2 ** self.m), 1)])
                     # print(t, 't'*10)
                     one_sum += temp_sum % 2
-                print(one_sum)
+                print(one_sum, len_check_sum, 'len_check_sum')
+                print(self.k - num_of_conjunctions + t, 'self.k - num_of_conjunctions + t')
                 if one_sum * 2 > len_check_sum:
                     curr_mess[self.k - num_of_conjunctions + t] = 1
                     one_sum = 0
