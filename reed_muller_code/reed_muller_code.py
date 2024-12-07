@@ -143,7 +143,6 @@ def sum_of_powers_of_two(nums, n):
 
 
 rm = ReedMuller(2, 4)
-# не корректно работает для малых r
 code_word = rm.encode([1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0])
 print(code_word)
 print(rm.decode(code_word))
