@@ -8,7 +8,7 @@ class ReedMuller:
         self.r = r  # order
         self.m = m  # num vars
         self.n = 2 ** m  # code word length
-        self.k = self._calculate_k()  # cardinality
+        self.k = self._calculate_k()  # message length
         self.G = self._generating_matrix()  # generating matrix
         self.t = int(2 ** (self.m - self.r) - 1 / 2)  # correction capability
         self.curr_mess = [0] * self.k
