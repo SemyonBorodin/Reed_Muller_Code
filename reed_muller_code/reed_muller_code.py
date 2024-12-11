@@ -127,7 +127,7 @@ def generate_apply_bin_noise(codeword, correction_capability):
     codeword = codeword.copy()
     err_pos = sample(range(len(codeword)), randint(0, correction_capability))  # error positions
     if not err_pos:
-        return 'there is to errors'
+        return 'There are no errors'
     for pos in err_pos:
         codeword[pos] ^= 1
     return codeword
