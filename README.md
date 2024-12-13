@@ -5,11 +5,9 @@ This repository contains an implementation of Reed-Muller codes, a class of erro
 ## Table of Contents
 
 - [Description](#description)
-- [Features](#features)
 - [Usage](#usage)
+- [Example](#example)
 - [Installation](#installation)
-- [Project Structure](#project-structure)
-
 
 ## Description
 
@@ -21,12 +19,36 @@ The Reed-Muller code of order `r` and length `n = 2^m` is constructed using the 
 - Calculating the cardinality `k` of the code
 - Generating the generating matrix `G`
 - Encoding binary messages of length `k`
-
-The decoder for Reed-Muller codes is currently a placeholder and will be implemented in future updates.
-
+- Decoding of noisy messages using a checksum-based algorithm.
 
 ## Usage
 
+0. **RM-codes:**
+
+```python
+from reed_muller_code import ReedMuller
+
+# Initialize the Reed-Muller code with desired parameters
+rm_code = ReedMuller(r=2, m=4)
+
+# Example message to encode
+message = [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1]
+
+# Encode the message
+encoded_message = rm_code.encode(message)
+
+# Add noise (optional, for testing decoding)
+noisy_message = add_noise(encoded_message)
+
+# Decode the noisy message
+decoded_message = rm_code.decode(noisy_message)
+
+print(f"Original Message: {message}")
+print(f"Encoded Message: {encoded_message}")
+print(f"Noisy Message: {noisy_message}")
+print(f"Decoded Message: {decoded_message}")
+```
+   
 1. **Creating dictionary and initializing `ReedMuller`:**
 
 ```python
@@ -146,3 +168,18 @@ bin_messages = [
     "0000000100000000"]
 decoded_mes = "идет лес по медведю видит в огне внутри машина сел в огонь и уехал"
 ```
+## Installation
+
+To install the necessary dependencies, you need this packages:
+
+```python
+from scipy.special import binom
+from itertools import combinations
+from random import sample, randint
+```
+The project requires Python 3.x and the scipy library for computing binomial coefficients used in the decoding algorithm;
+combinations from itertools; 
+sample, randint from random.
+
+
+
