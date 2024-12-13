@@ -27,8 +27,6 @@ The decoder for Reed-Muller codes is currently a placeholder and will be impleme
 
 ## Usage
 
-### Кодирование и декодирование строки
-
 1. **Creating dictionary and initializing `ReedMuller`:**
 
 ```python
