@@ -2,13 +2,14 @@ from scipy.special import binom
 from itertools import combinations
 from random import sample, randint
 
+
 class ReedMuller:
 
     def __init__(self, r, m):
         self.r = r  # order
         self.m = m  # num vars
         self.n = 2 ** m  # code word length
-        self.k = self._calculate_k()  # cardinality
+        self.k = self._calculate_k()  # message length
         self.G = self._generating_matrix()  # generating matrix
         self.t = int(2 ** (self.m - self.r) - 1 / 2)  # correction capability
         self.curr_mess = [0] * self.k
@@ -63,10 +64,10 @@ class ReedMuller:
         return generate_apply_bin_noise(codeword, self.t)
 
     def create_ind(self,
-            k, word,
-            curr_mess, r,
-            actual_r, m,
-            list_of_index):
+                   k, word,
+                   curr_mess, r,
+                   actual_r, m,
+                   list_of_index):
         one_sum = 0
         var_indexes = tuple(range(0, self.m))
         j, k = 0, 0
@@ -102,8 +103,8 @@ class ReedMuller:
             for t in range(cur_num_conj):
                 for d in range(len_check_sum):
                     temp_sum = sum([received[int(list_of_index[w])]
-                                   for w in range(0 + d*num_check_sums + t * int(2 ** self.m),
-                                   num_check_sums + d*num_check_sums + t * int(2 ** self.m), 1)])
+                                    for w in range(0 + d * num_check_sums + t * int(2 ** self.m),
+                                                   num_check_sums + d * num_check_sums + t * int(2 ** self.m), 1)])
                     temp_sum = temp_sum % 2
                     one_sum += temp_sum
                 if one_sum * 2 > len_check_sum:
@@ -142,8 +143,24 @@ def sum_of_powers_of_two(nums, n):
     return int(total_sum)
 
 
-rm = ReedMuller(2, 4)
-code_word = rm.encode([1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0])
-print(code_word)
-print(rm.decode(code_word))
-print(code_word)
+# Создаем список ключей
+keys = [' '] + [chr(code) for code in range(ord('а'), ord('я') + 1)]
+
+# Создаем словарь с ключами, значениями от 0 до 32 (без буквы йо)
+custom_dict = {key: idx for idx, key in enumerate(keys)}
+
+
+# rm = ReedMuller(2, 4)
+# code_word = rm.encode([1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0])
+# print(code_word)
+# print(rm.decode(code_word))
+# print(code_word)
+
+def symbol_to_message(symbol, our_dict, message_len):
+    mess = []
+    num = int(custom_dict[symbol])
+
+
+test_str = 'те ст'
+for el in test_str:
+    one_symbol = int(custom_dict[el])
