@@ -27,6 +27,124 @@ The decoder for Reed-Muller codes is currently a placeholder and will be impleme
 
 ## Usage
 
-### Example
+### Кодирование и декодирование строки
 
-TO DO
+1. **Creating dictionary and initializing `ReedMuller`:**
+
+```python
+russian_dict = create_russian_dict()
+rm = ReedMuller(r=2, m=4)
+message_len = rm.k
+```
+
+2. **Reading string from input.txt:**
+
+```python
+with open('input.txt', 'r', encoding='utf-8') as f:
+    input_str = f.read()
+```
+
+3. **Transform character strings to binary representation and encode them:**
+
+```python
+with open('input.txt', 'r', encoding='utf-8') as f:
+    input_str = f.read()
+```
+
+4. **Encode and add noise:**
+
+```python
+bin_messages = []
+for symbol in input_str:
+    if symbol in russian_dict:
+        one_symbol_message = symbol_to_message(symbol, russian_dict, rm.k)
+        bin_messages.append(one_symbol_message)
+```
+
+5. **Decode noisy messages in a string notation of zeros and ones and save the result to a file:**
+
+```python
+bin_messages = []
+for symbol in input_str:
+    if symbol in russian_dict:
+        one_symbol_message = symbol_to_message(symbol, russian_dict, rm.k)
+        bin_messages.append(one_symbol_message)
+```
+
+
+### Example
+5. "Decode noisy messages:"
+
+```python
+bin_messages = [
+    "0000111100001000",
+    "0011011100111100",
+    "0110011001100110",
+    "0101010110100001",
+    "0000000000000000",
+    "0011111000111100",
+    "0110011001000110",
+    "0101010111101010",
+    "0000000000000000",
+    "0000000111111111",
+    "0110100101100110",
+    "0000000000000000",
+    "0011100000110011",
+    "0110011001100110",
+    "0011001100111100",
+    "0101010101011110",
+    "0110011001100110",
+    "0011001100111100",
+    "0110100110010001",
+    "0000000000000000",
+    "1101010101011010",
+    "0000111100000000",
+    "0011001100111100",
+    "0000111000000000",
+    "0101010110101101",
+    "0000000000000000",
+    "0101010101011010",
+    "0000000000000000",
+    "0110100101100110",
+    "0011001100110011",
+    "0110100101101001",
+    "0110011001101110",
+    "0100000000000000",
+    "0101010101011010",
+    "0110100101101001",
+    "0011001111001100",
+    "0101010110100100",
+    "0000000011110001",
+    "0000111100000000",
+    "0000000000000000",
+    "0011110000110011",
+    "0000000000001111",
+    "0000101111111111",
+    "0000110100000000",
+    "0110110101101001",
+    "1000000000001111",
+    "0000000010000000",
+    "0101010110101011",
+    "0110011001100100",
+    "0011110000111100",
+    "0000000000000000",
+    "0101010100011010",
+    "0000000010000000",
+    "0110101101100110",
+    "0011001100110011",
+    "0110100101100110",
+    "0100100101101001",
+    "0011110011001100",
+    "0000000000000001",
+    "0001111100000000",
+    "0000000000000100",
+    "0011001111001100",
+    "0110011001100110",
+    "1110011010011001",
+    "0000000000001111",
+    "0011110000111100",
+    "0000001000000000",
+    "0000000000000000",
+    "0000000100000000"]
+decoded_mes = "идет лес по медведю видит в огне внутри машина сел в огонь и уехал"
+```
