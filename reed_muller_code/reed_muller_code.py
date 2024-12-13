@@ -11,7 +11,7 @@ class ReedMuller:
         self.n = 2 ** m  # code word length
         self.k = self._calculate_k()  # message length
         self.G = self._generating_matrix()  # generating matrix
-        self.t = int(2 ** (self.m - self.r) - 1 / 2)  # correction capability
+        self.t = int(2 ** (self.m - self.r - 1) - 1)  # correction capability
         self.curr_mess = [0] * self.k
 
     # self.codewords = self._generate_codewords() # list of all code words
@@ -141,26 +141,3 @@ def sum_of_powers_of_two(nums, n):
     for num in nums:
         total_sum += 2 ** (n - num - 1)
     return int(total_sum)
-
-
-# Создаем список ключей
-keys = [' '] + [chr(code) for code in range(ord('а'), ord('я') + 1)]
-
-# Создаем словарь с ключами, значениями от 0 до 32 (без буквы йо)
-custom_dict = {key: idx for idx, key in enumerate(keys)}
-
-
-# rm = ReedMuller(2, 4)
-# code_word = rm.encode([1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0])
-# print(code_word)
-# print(rm.decode(code_word))
-# print(code_word)
-
-def symbol_to_message(symbol, our_dict, message_len):
-    mess = []
-    num = int(custom_dict[symbol])
-
-
-test_str = 'те ст'
-for el in test_str:
-    one_symbol = int(custom_dict[el])
