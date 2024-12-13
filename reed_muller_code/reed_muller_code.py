@@ -62,7 +62,10 @@ class ReedMuller:
 
     def add_noise(self, codeword):
         return generate_apply_bin_noise(codeword, self.t)
-
+    
+    def add_more_noise(self, codeword): # from 0 to 2*t errors
+        noise_gainer = randint(0, self.t)
+        return generate_apply_bin_noise(codeword, self.t + noise_gainer)
     def create_ind(self,
                    k, word,
                    curr_mess, r,
