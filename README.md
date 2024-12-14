@@ -74,11 +74,7 @@ with open('input.txt', 'r', encoding='utf-8') as f:
 4. **Encode and add noise:**
 
 ```python
-bin_messages = []
-for symbol in input_str:
-    if symbol in russian_dict:
-        one_symbol_message = symbol_to_message(symbol, russian_dict, rm.k)
-        bin_messages.append(one_symbol_message)
+TO DO
 ```
 
 5. **Decode noisy messages in a string notation of zeros and ones and save the result to a file:**
